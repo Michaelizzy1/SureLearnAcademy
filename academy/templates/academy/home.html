@@ -1,0 +1,632 @@
+{% extends "academy/base.html" %}
+
+{% block title %}SureLearn Academy | Private & Home Lessons{% endblock %}
+
+{% block extra_css %}
+<style>
+
+  :root{
+    --ink:#0F1B3D;
+    --purple:#6C4FE0;
+    --purple-deep:#5138B8;
+    --lavender:#EEEAFB;
+    --paper:#F4F6FC;
+    --slate:#5B6478;
+    --line:#E3DEF4;
+    --gold:#E8A33D;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    line-height:1.1;
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    font-weight:500;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--purple-deep);
+  }
+
+  .wrap{ max-width:none; width:100%; margin:0 auto; padding:0 32px; }
+  section{ padding:88px 0; }
+
+  @media (max-width:640px){
+    section{ padding:56px 0; }
+    .wrap{ padding:0 20px; }
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,253,249,0.9);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 32px; max-width:none; width:100%; margin:0 auto;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand img{ width:38px; height:38px; border-radius:50%; }
+  .brand-name{ font-family:'Fraunces', serif; font-weight:600; font-size:1.1rem; }
+  .nav .brand-name{ font-size:1.5rem; }
+  .brand-name span{ color:var(--purple); }
+  .nav-links{ display:flex; gap:32px; font-size:0.92rem; font-weight:500; }
+  .nav-links a:hover{ color:var(--purple); }
+  .nav-mobile-hide{ display:flex; }
+  @media (max-width:780px){ .nav-mobile-hide{ display:none; } }
+
+  /* Menu dropdown */
+  .menu{ position:relative; }
+  .menu-btn{
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border-radius:50%;
+    background:var(--ink); cursor:pointer; border:none; padding:0;
+  }
+  .menu-btn:hover{ background:var(--purple-deep); }
+  .menu-btn .bars{ width:20px; height:14px; position:relative; }
+  .menu-btn .bars span{
+    position:absolute; left:0; width:100%; height:2px; background:#fff; border-radius:2px;
+    transition:transform .2s ease, opacity .2s ease, top .2s ease;
+  }
+  .menu-btn .bars span:nth-child(1){ top:0; }
+  .menu-btn .bars span:nth-child(2){ top:6px; }
+  .menu-btn .bars span:nth-child(3){ top:12px; }
+  .menu.open .menu-btn .bars span:nth-child(1){ top:6px; transform:rotate(45deg); }
+  .menu.open .menu-btn .bars span:nth-child(2){ opacity:0; }
+  .menu.open .menu-btn .bars span:nth-child(3){ top:6px; transform:rotate(-45deg); }
+  .menu-dropdown{
+    position:absolute; top:calc(100% + 10px); right:0; min-width:200px;
+    background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    box-shadow:0 20px 40px -14px rgba(15,27,61,0.25);
+    padding:8px; display:none; flex-direction:column; gap:2px;
+  }
+  .menu.open .menu-dropdown{ display:flex; }
+  .menu-dropdown a{
+    padding:10px 12px; border-radius:9px; font-size:0.9rem; font-weight:500;
+  }
+  .menu-dropdown a:hover{ background:var(--lavender); color:var(--purple-deep); }
+  .menu-dropdown .divider{ height:1px; background:var(--line); margin:6px 4px; }
+  .menu-dropdown a.cta-link{ color:var(--purple-deep); font-weight:600; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding-top:72px; padding-bottom:64px;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:64px; align-items:center;
+  }
+  @media (max-width:900px){
+    .hero{ padding-top:44px; padding-bottom:44px; }
+    .hero-grid{ grid-template-columns:1fr; gap:40px; }
+  }
+
+  .hero h1{ font-size:clamp(2.2rem, 4.6vw, 3.4rem); margin:16px 0 20px; max-width:14ch; }
+  .hero h1 em{ font-style:normal; color:var(--purple); }
+  .hero p.lede{ font-size:1.08rem; color:var(--slate); max-width:46ch; margin-bottom:32px; }
+
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:14px 26px; border-radius:100px; font-weight:600; font-size:0.95rem;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary{ background:var(--purple); color:#fff; }
+  .btn-primary:hover{ background:var(--purple-deep); transform:translateY(-1px); }
+  .btn-ghost{ border:1.5px solid var(--ink); color:var(--ink); }
+  .btn-ghost:hover{ background:var(--ink); color:#fff; }
+
+  .hero-trust{ display:flex; gap:28px; flex-wrap:wrap; }
+  .hero-trust div{ }
+  .hero-trust strong{ display:block; font-family:'Fraunces',serif; font-size:1.4rem; color:var(--purple-deep); }
+  .hero-trust span{ font-size:0.8rem; color:var(--slate); }
+
+  /* Signature: weekly timetable strip */
+  .timetable{
+    background:var(--ink); border-radius:22px; padding:26px;
+    box-shadow:0 30px 60px -20px rgba(15,27,61,0.35);
+  }
+  .timetable-head{
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;
+  }
+  .timetable-head .eyebrow{ color:var(--gold); }
+  .timetable-head h3{ color:#fff; font-size:1rem; font-weight:500; font-family:'Inter',sans-serif; }
+  .tt-grid{
+    display:grid; grid-template-columns:repeat(7,1fr); gap:6px;
+  }
+  .tt-day{ text-align:center; }
+  .tt-day .lbl{ font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:rgba(255,255,255,0.5); margin-bottom:8px; letter-spacing:0.06em; }
+  .tt-slot{
+    height:20px; border-radius:5px; margin-bottom:5px; background:rgba(255,255,255,0.06);
+  }
+  .tt-slot.on{ background:var(--purple); }
+  .tt-slot.on2{ background:var(--gold); opacity:0.85; }
+  .timetable-foot{ margin-top:16px; font-size:0.78rem; color:rgba(255,255,255,0.55); }
+  .timetable-foot b{ color:#fff; font-weight:500; }
+
+  /* ---------- Tracks (two doors) ---------- */
+  .tracks{ background:var(--lavender); }
+  .section-head{ max-width:640px; margin-bottom:48px; }
+  .section-head h2{ font-size:clamp(1.7rem,3vw,2.3rem); margin-top:10px; }
+  .section-head p{ color:var(--slate); margin-top:12px; font-size:1.02rem; }
+
+  .track-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  @media (max-width:980px){ .track-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:640px){ .track-grid{ grid-template-columns:1fr; } }
+
+  .track-card{
+    background:var(--paper); border-radius:20px; padding:36px;
+    border:1px solid var(--line);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .track-card:hover{ transform:translateY(-4px); box-shadow:0 20px 40px -18px rgba(108,79,224,0.35); }
+  .track-card .eyebrow{ margin-bottom:10px; display:block; }
+  .track-card h3{ font-size:1.5rem; margin-bottom:12px; }
+  .track-card p{ color:var(--slate); margin-bottom:20px; }
+  .track-card ul li{
+    font-size:0.9rem; padding:7px 0; border-top:1px solid var(--line); color:var(--ink);
+    display:flex; justify-content:space-between;
+  }
+  .track-card ul li span.code{ font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--purple-deep); }
+  .track-card .more-link{
+    display:block; font-size:0.85rem; font-weight:600; color:var(--purple-deep);
+    padding-top:12px; text-align:right;
+  }
+  .track-card .more-link:hover{ color:var(--purple); }
+  .track-card .btn{ margin-top:24px; width:100%; justify-content:center; }
+  .tracks-footer{ text-align:center; margin-top:40px; }
+
+  /* ---------- How it works ---------- */
+  .how-path{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+  }
+  @media (max-width:900px){ .how-path{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .how-path{ grid-template-columns:1fr; } }
+
+  .how-step{
+    background:var(--lavender);
+    border-radius:18px;
+    padding:28px 24px;
+    display:flex; flex-direction:column;
+    height:100%;
+  }
+  .how-step:nth-child(2n){ background:#FBF1DE; }
+
+  .how-node{
+    width:52px; height:52px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--paper);
+    margin-bottom:22px;
+  }
+  .how-node svg{ width:24px; height:24px; stroke:var(--purple-deep); }
+  .how-step:nth-child(2n) .how-node svg{ stroke:var(--gold); }
+
+  .how-step .num{
+    font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--slate);
+    letter-spacing:0.08em; margin-bottom:auto;
+  }
+  .how-step h4{ font-family:'Fraunces',serif; font-size:1.25rem; margin:14px 0 8px; }
+  .how-step p{ color:var(--slate); font-size:0.92rem; }
+
+  /* ---------- Courses ---------- */
+  .courses{ background:var(--ink); color:#fff; }
+  .courses .section-head p{ color:rgba(255,255,255,0.65); }
+  .courses .eyebrow{ color:var(--gold); }
+  .course-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:900px){ .course-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .course-grid{ grid-template-columns:1fr; } }
+  .course-card{
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+    border-radius:16px; padding:22px;
+  }
+  .course-card .code{ font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--gold); }
+  .course-card h4{ font-family:'Fraunces',serif; font-size:1.15rem; margin:10px 0 8px; }
+  .course-card p{ font-size:0.86rem; color:rgba(255,255,255,0.6); }
+
+  /* ---------- Testimonials ---------- */
+  .quote-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  @media (max-width:900px){ .quote-grid{ grid-template-columns:1fr; } }
+  .quote-card{ background:var(--lavender); border-radius:18px; padding:26px; }
+  .quote-card p{ font-family:'Fraunces',serif; font-size:1.05rem; font-style:italic; margin-bottom:20px; }
+  .quote-person{ display:flex; align-items:center; gap:12px; }
+  .quote-person img{
+    width:44px; height:44px; border-radius:50%; object-fit:cover;
+    border:2px solid var(--paper);
+  }
+  .quote-person .who-name{ font-size:0.92rem; font-weight:700; color:var(--ink); font-family:'Inter',sans-serif; }
+  .quote-person .who-title{ font-size:0.78rem; color:var(--slate); }
+
+  /* ---------- FAQ ---------- */
+  .faq{ max-width:760px; }
+  details{ border-bottom:1px solid var(--line); padding:18px 0; }
+  summary{ cursor:pointer; font-weight:600; font-size:1rem; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content:'+'; font-family:'JetBrains Mono',monospace; color:var(--purple); font-size:1.2rem; }
+  details[open] summary::after{ content:'–'; }
+  details p{ color:var(--slate); margin-top:12px; font-size:0.94rem; max-width:60ch; }
+
+  /* ---------- Contact ---------- */
+  .contact{ background:var(--lavender); }
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
+  @media (max-width:860px){ .contact-grid{ grid-template-columns:1fr; } }
+
+  form{ display:grid; gap:14px; }
+  label{ font-size:0.8rem; font-weight:600; margin-bottom:5px; display:block; }
+  input, select, textarea{
+    width:100%; padding:13px 14px; border-radius:10px; border:1.5px solid var(--line);
+    font-family:'Inter',sans-serif; font-size:0.95rem; background:#fff; color:var(--ink);
+  }
+  input:focus, select:focus, textarea:focus{ outline:2px solid var(--purple); outline-offset:1px; border-color:var(--purple); }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:480px){ .row2{ grid-template-columns:1fr; } }
+  .form-note{ font-size:0.8rem; color:var(--slate); margin-top:4px; }
+
+  .whatsapp-box{
+    background:var(--ink); color:#fff; border-radius:18px; padding:28px; margin-top:24px;
+  }
+  .whatsapp-box h4{ font-family:'Fraunces',serif; font-size:1.2rem; margin-bottom:8px; }
+  .whatsapp-box p{ color:rgba(255,255,255,0.65); font-size:0.9rem; margin-bottom:16px; }
+
+  /* ---------- Footer ---------- */
+  footer{ background:var(--ink); color:#fff; padding-top:64px; }
+  .footer-top{
+    display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:40px;
+    padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  @media (max-width:780px){ .footer-top{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:480px){ .footer-top{ grid-template-columns:1fr; } }
+  footer .brand-name{ color:#fff; font-size:1.1rem; }
+  footer .brand-name span{ color:var(--purple); }
+  .footer-about p{ color:rgba(255,255,255,0.6); font-size:0.9rem; margin-top:14px; max-width:32ch; }
+  .footer-col h5{
+    font-family:'JetBrains Mono',monospace; font-size:0.7rem; letter-spacing:0.1em;
+    text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:16px;
+  }
+  .footer-col ul{ display:flex; flex-direction:column; gap:11px; }
+  .footer-col a{ color:rgba(255,255,255,0.75); font-size:0.9rem; }
+  .footer-col a:hover{ color:var(--gold); }
+
+  .social-row{ display:flex; gap:10px; margin-top:16px; }
+  .social-icon{
+    width:38px; height:38px; border-radius:50%;
+    background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .social-icon svg{ width:17px; height:17px; stroke:#fff; }
+  .social-icon:hover{ background:var(--purple); transform:translateY(-2px); }
+
+  .footer-row{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; padding:26px 0; }
+  .footer-row .brand-name{ font-size:1rem; }
+  footer .fine{ font-size:0.8rem; color:rgba(255,255,255,0.5); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Private &amp; home lessons</span>
+        <h1>Learning that comes to <em>your</em> schedule, not the other way round.</h1>
+        <p class="lede">From SSCE and JAMB prep to web development and programming, we run one-on-one lessons at home, online, or wherever suits you, with tutors matched to how your child (or you) actually learns.</p>
+        <div class="hero-ctas">
+          <a href="#contact" class="btn btn-primary">Book a free consultation</a>
+          <a href="#tracks" class="btn btn-ghost">See all courses</a>
+        </div>
+        <div class="hero-trust">
+          <div><strong>3</strong><span>Learning tracks</span></div>
+          <div><strong>1:1</strong><span>Tutor matching</span></div>
+          <div><strong>Home / Online</strong><span>Your choice of format</span></div>
+        </div>
+      </div>
+
+      <div class="timetable">
+        <div class="timetable-head">
+          <span class="eyebrow">This week</span>
+          <h3>Sample flexible schedule</h3>
+        </div>
+        <div class="tt-grid">
+          <div class="tt-day"><div class="lbl">MON</div><div class="tt-slot"></div><div class="tt-slot on"></div><div class="tt-slot"></div></div>
+          <div class="tt-day"><div class="lbl">TUE</div><div class="tt-slot on2"></div><div class="tt-slot"></div><div class="tt-slot"></div></div>
+          <div class="tt-day"><div class="lbl">WED</div><div class="tt-slot"></div><div class="tt-slot"></div><div class="tt-slot on"></div></div>
+          <div class="tt-day"><div class="lbl">THU</div><div class="tt-slot on2"></div><div class="tt-slot on"></div><div class="tt-slot"></div></div>
+          <div class="tt-day"><div class="lbl">FRI</div><div class="tt-slot"></div><div class="tt-slot"></div><div class="tt-slot"></div></div>
+          <div class="tt-day"><div class="lbl">SAT</div><div class="tt-slot on"></div><div class="tt-slot on2"></div><div class="tt-slot"></div></div>
+          <div class="tt-day"><div class="lbl">SUN</div><div class="tt-slot"></div><div class="tt-slot"></div><div class="tt-slot"></div></div>
+        </div>
+        <div class="timetable-foot"><b>You pick the slots.</b> Morning, evening or weekend, lessons are built around your week rather than a fixed timetable.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tracks" id="tracks">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Three ways to learn with us</span>
+      <h2>Choose your track</h2>
+      <p>Whether you're preparing for exams, building tech skills, or sharpening a creative craft, every learner gets a dedicated tutor and a plan built around their goals.</p>
+    </div>
+    <div class="track-grid">
+      <div class="track-card">
+        <span class="eyebrow">Exam Prep</span>
+        <h3>SSCE &amp; JAMB Coaching</h3>
+        <p>Subject-by-subject coaching for students preparing for major exams, with practice tests and past-question drilling.</p>
+        <ul>
+          <li>SSCE (WAEC/NECO), all subjects <span class="code">EXM-01</span></li>
+          <li>JAMB / UTME prep <span class="code">EXM-02</span></li>
+          <li>Mathematics &amp; English intensives <span class="code">EXM-03</span></li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Enquire about exam prep</a>
+      </div>
+      <div class="track-card">
+        <span class="eyebrow">Tech &amp; Programming</span>
+        <h3>Code, AI &amp; Emerging Tech</h3>
+        <p>Hands-on tech lessons for beginners and career-switchers, from first lines of code to portfolio-ready projects.</p>
+        <ul>
+          <li>Web development (HTML/CSS/JS) <span class="code">TEC-01</span></li>
+          <li>Computer programming <span class="code">TEC-02</span></li>
+          <li>AI &amp; machine learning <span class="code">TEC-06</span></li>
+        </ul>
+        <a href="{% url 'academy:courses' %}#tech" class="more-link">+3 more courses in this track →</a>
+        <a href="#contact" class="btn btn-primary">Enquire about tech courses</a>
+      </div>
+      <div class="track-card">
+        <span class="eyebrow">Creative &amp; Digital Media</span>
+        <h3>Design, Video &amp; Marketing</h3>
+        <p>Practical, portfolio-focused lessons for learners who want to create, design and market visually, with no experience required.</p>
+        <ul>
+          <li>Graphics design <span class="code">CRE-01</span></li>
+          <li>Video editing <span class="code">CRE-02</span></li>
+          <li>UI/UX design <span class="code">CRE-03</span></li>
+        </ul>
+        <a href="{% url 'academy:courses' %}#creative" class="more-link">+1 more course in this track →</a>
+        <a href="#contact" class="btn btn-primary">Enquire about creative courses</a>
+      </div>
+    </div>
+    <div class="tracks-footer">
+      <a href="{% url 'academy:courses' %}" class="btn btn-ghost">View all courses →</a>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The process</span>
+      <h2>How it works</h2>
+    </div>
+    <div class="how-path">
+      <div class="how-step">
+        <div class="how-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16v14H8l-4 4V4z"/>
+            <path d="M8 9h8M8 12h5"/>
+          </svg>
+        </div>
+        <div class="num">STEP 01</div>
+        <h4>Enquire</h4>
+        <p>Tell us the subject, goals and preferred schedule.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5c0-.6.4-1 1-1h3l2 5-2 1.3a11 11 0 0 0 5 5L14.7 13l5 2v3c0 .6-.4 1-1 1C10.5 19 4 12.5 4 5z"/>
+          </svg>
+        </div>
+        <div class="num">STEP 02</div>
+        <h4>Free consultation</h4>
+        <p>We call to understand the learner's level and needs.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="8" r="3"/>
+            <path d="M3 19c0-3.3 2.7-5.5 6-5.5S15 15.7 15 19"/>
+            <path d="M16 8a3 3 0 1 1 0 6"/>
+            <path d="M17.5 13.5c2.3.4 3.5 2.2 3.5 5.5"/>
+          </svg>
+        </div>
+        <div class="num">STEP 03</div>
+        <h4>Tutor match</h4>
+        <p>We pair you with a tutor suited to the subject and pace.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5V6a2 2 0 0 1 2-2h11.5v14.5H6a2 2 0 0 0 0 4h13"/>
+            <path d="M8 8h7"/>
+          </svg>
+        </div>
+        <div class="num">STEP 04</div>
+        <h4>Start lessons</h4>
+        <p>Begin at home, online, or wherever works best.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="courses">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Full course list</span>
+      <h2>Explore all subjects</h2>
+      <p>New courses are added regularly, so this is just a snapshot of what we currently teach.</p>
+    </div>
+    <div class="course-grid">
+      <div class="course-card"><div class="code">EXM-01</div><h4>SSCE (All Subjects)</h4><p>Coaching across sciences, arts and commercial subjects.</p></div>
+      <div class="course-card"><div class="code">EXM-02</div><h4>JAMB / UTME</h4><p>Focused prep on the four required subjects.</p></div>
+      <div class="course-card"><div class="code">TEC-01</div><h4>Web Development</h4><p>HTML, CSS and JavaScript, from basics to first projects.</p></div>
+      <div class="course-card"><div class="code">TEC-06</div><h4>Artificial Intelligence &amp; Machine Learning</h4><p>Foundations of AI/ML, from concepts to hands-on models.</p></div>
+      <div class="course-card"><div class="code">CRE-01</div><h4>Graphics Design</h4><p>Visual design fundamentals using industry-standard tools.</p></div>
+      <div class="course-card"><div class="code">CRE-03</div><h4>UI/UX Design</h4><p>Designing usable, attractive interfaces for web and apps.</p></div>
+    </div>
+    <div class="tracks-footer">
+      <a href="{% url 'academy:courses' %}" class="btn btn-ghost">See all 14 courses →</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why families choose us</span>
+      <h2>What learners are saying</h2>
+    </div>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <p>"Lessons fit around my daughter's school timetable instead of fighting it."</p>
+        <div class="quote-person">
+          <img src="assets/testimonial-1.jpg" alt="Photo of Mrs. Adaeze Okonkwo">
+          <div>
+            <div class="who-name">Adaeze Okonkwo</div>
+            <div class="who-title">Parent of an SS2 student</div>
+          </div>
+        </div>
+      </div>
+      <div class="quote-card">
+        <p>"I finally understood JavaScript once I had one-on-one time instead of a crowded class."</p>
+        <div class="quote-person">
+          <img src="assets/testimonial-2.jpg" alt="Photo of Tunde Balogun">
+          <div>
+            <div class="who-name">Tunde Balogun</div>
+            <div class="who-title">Web development student</div>
+          </div>
+        </div>
+      </div>
+      <div class="quote-card">
+        <p>"Our tutor adjusted the pace every week based on where my son was struggling."</p>
+        <div class="quote-person">
+          <img src="assets/testimonial-3.jpg" alt="Photo of Mr. Ibrahim Musa">
+          <div>
+            <div class="who-name">Ibrahim Musa</div>
+            <div class="who-title">Parent of a JAMB candidate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Good to know</span>
+      <h2>Frequently asked questions</h2>
+    </div>
+    <div class="faq">
+      <details open>
+        <summary>Are lessons only available at home?</summary>
+        <p>No, you can choose home visits, online lessons, or a mix of both depending on what works for you.</p>
+      </details>
+      <details>
+        <summary>How are tutors selected?</summary>
+        <p>Tutors are matched to each learner based on subject expertise and the student's current level and pace.</p>
+      </details>
+      <details>
+        <summary>Can I try a lesson before committing?</summary>
+        <p>Yes, every enquiry starts with a free consultation so we can understand your goals before any commitment.</p>
+      </details>
+      <details>
+        <summary>Do you teach both exam prep and tech skills to the same student?</summary>
+        <p>Absolutely. Some learners take both, for example JAMB prep alongside web development.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <span class="eyebrow">Get started</span>
+      <h2 style="margin-top:10px; font-size:clamp(1.7rem,3vw,2.3rem);">Tell us what you're looking for</h2>
+      <p style="color:var(--slate); margin-top:12px; max-width:46ch;">Fill in the form and we'll reach out to arrange a free consultation and match you with the right tutor.</p>
+
+      <div class="whatsapp-box">
+        <h4>Prefer to chat directly?</h4>
+        <p>Message us on WhatsApp and we'll respond the same day.</p>
+        <a href="https://wa.me/000000000000" class="btn btn-primary">Chat on WhatsApp</a>
+      </div>
+    </div>
+
+    <form method="post" action="{% url 'academy:contact' %}">
+      {% csrf_token %}
+      <div class="row2">
+        <div>
+          <label for="name">Full name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" required>
+        </div>
+        <div>
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" placeholder="e.g. 0803 000 0000" required>
+        </div>
+      </div>
+      <div>
+        <label for="course">Course / subject</label>
+        <select id="course" name="course_interest">
+          <option>SSCE (All Subjects)</option>
+          <option>JAMB / UTME</option>
+          <option>Mathematics &amp; English</option>
+          <option>Web Development</option>
+          <option>Computer Programming</option>
+          <option>Mobile App Development</option>
+          <option>Cybersecurity</option>
+          <option>Artificial Intelligence &amp; Machine Learning</option>
+          <option>Prompt Engineering</option>
+          <option>Graphics Design</option>
+          <option>Video Editing</option>
+          <option>UI/UX Design</option>
+          <option>Digital Marketing</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="row2">
+        <div>
+          <label for="level">Current level</label>
+          <input id="level" name="level" type="text" placeholder="e.g. SS2, beginner">
+        </div>
+        <div>
+          <label for="mode">Preferred mode</label>
+          <select id="mode" name="preferred_mode">
+            <option value="home">Home visits</option>
+            <option value="online">Online</option>
+            <option value="either" selected>Either</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label for="time">Preferred days / times</label>
+        <input id="time" name="preferred_time" type="text" placeholder="e.g. Weekday evenings, Saturdays">
+      </div>
+      <div>
+        <label for="message">Anything else we should know?</label>
+        <textarea id="message" name="message" rows="3" placeholder="Goals, exam date, current struggles..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="justify-content:center; border:none; cursor:pointer;">Send enquiry</button>
+      <p class="form-note">We usually respond within one business day.</p>
+    </form>
+  </div>
+</section>
+{% endblock %}
