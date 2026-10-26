@@ -1,4 +1,5 @@
 {% extends "academy/base.html" %}
+{% load static %}
 
 {% block title %}About Us | SureLearn Academy{% endblock %}
 
@@ -242,7 +243,7 @@
     <p class="lede">We pair students with a dedicated tutor and a plan built around their pace, their goals and their schedule, at home, online, or both.</p>
     <div class="page-hero-stats">
       <div><strong>5+ yrs</strong><span>Running in Abuja</span></div>
-      <div><strong>40+</strong><span>Vetted tutors</span></div>
+      <div><strong>04+</strong><span>Vetted tutors</span></div>
       <div><strong>600+</strong><span>Students taught</span></div>
     </div>
   </div>
@@ -260,10 +261,10 @@
       <p>We work across two worlds, exam prep and tech skills, because both come down to the same thing: a clear plan, a tutor who's actually paying attention, and consistent practice over time.</p>
       <div class="founder-card">
         <div class="founder-photo" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          <img src="{% static 'assets/izzy.jpg' %}" alt="Founder Image">
         </div>
         <div>
-          <strong>Founded by [Founder Name]</strong>
+          <strong>Founded by Michael Israel Eneche</strong>
           <p>SureLearn Academy started with one tutor and a handful of students in Abuja, and grew on the same principle it started with: teach the person, not the class.</p>
         </div>
       </div>
