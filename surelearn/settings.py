@@ -36,7 +36,7 @@ DEBUG = os.getenv("DEBUG", "False" if os.getenv("RENDER") else "True").lower() =
 # Set SITE_URL in the environment if you prefer the non-www version.
 SITE_URL = os.getenv("SITE_URL", "https://www.surelearnacademy.com.ng")
 SITE_NAME = "SureLearn Academy"
-CONTACT_EMAIL = "hello@surelearnacademy.com"
+CONTACT_EMAIL = "surelearnacademia@gmail.com"
 CONTACT_PHONE = "+2347033947599"
 WHATSAPP_URL = "https://wa.me/2347033947599"
 SITEMAP_PROTOCOL = "https" if SITE_URL.startswith("https") else "http"
