@@ -27,7 +27,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Debug stays on locally, but is automatically off on Render (it sets RENDER=true).
+# Override either way with DEBUG=True/False in the environment.
+DEBUG = os.getenv("DEBUG", "False" if os.getenv("RENDER") else "True").lower() == "true"
+
+# --- SEO / site identity ---
+# Canonical domain used in canonical tags, sitemap, robots.txt and structured data.
+# Set SITE_URL in the environment if you prefer the non-www version.
+SITE_URL = os.getenv("SITE_URL", "https://www.surelearnacademy.com.ng")
+SITE_NAME = "SureLearn Academy"
+CONTACT_EMAIL = "hello@surelearnacademy.com"
+CONTACT_PHONE = "+2347033947599"
+WHATSAPP_URL = "https://wa.me/2347033947599"
+SITEMAP_PROTOCOL = "https" if SITE_URL.startswith("https") else "http"
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'www.surelearnacademy.com.ng', 'surelearnacademy.com.ng']
 
@@ -41,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'academy',
 
 ]
@@ -69,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'academy.context_processors.seo',
             ],
         },
     },
@@ -118,9 +132,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-ng'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 
@@ -142,3 +156,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# HTTPS: redirect http -> https in production (Render terminates TLS and sets this header).
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True

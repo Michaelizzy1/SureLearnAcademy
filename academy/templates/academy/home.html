@@ -1,7 +1,5 @@
 {% extends "academy/base.html" %}
 
-{% block title %}SureLearn Academy | Private & Home Lessons{% endblock %}
-
 {% block extra_css %}
 <style>
 
@@ -251,6 +249,11 @@
     width:44px; height:44px; border-radius:50%; object-fit:cover;
     border:2px solid var(--paper);
   }
+  .quote-person .avatar{
+    width:44px; height:44px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--lavender); color:var(--purple-deep); font-weight:700; font-size:0.85rem;
+  }
   .quote-person .who-name{ font-size:0.92rem; font-weight:700; color:var(--ink); font-family:'Inter',sans-serif; }
   .quote-person .who-title{ font-size:0.78rem; color:var(--slate); }
 
@@ -328,7 +331,7 @@
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="eyebrow">Private &amp; home lessons</span>
+        <span class="eyebrow">Private &amp; home lessons in Abuja</span>
         <h1>Learning that comes to <em>your</em> schedule, not the other way round.</h1>
         <p class="lede">From SSCE and JAMB prep to web development and programming, we run one-on-one lessons at home, online, or wherever suits you, with tutors matched to how your child (or you) actually learns.</p>
         <div class="hero-ctas">
@@ -499,7 +502,7 @@
       <div class="quote-card">
         <p>"Lessons fit around my daughter's school timetable instead of fighting it."</p>
         <div class="quote-person">
-          <img src="assets/testimonial-1.jpg" alt="Photo of Mrs. Adaeze Okonkwo">
+          <span class="avatar" aria-hidden="true">AO</span>
           <div>
             <div class="who-name">Adaeze Okonkwo</div>
             <div class="who-title">Parent of an SS2 student</div>
@@ -509,7 +512,7 @@
       <div class="quote-card">
         <p>"I finally understood JavaScript once I had one-on-one time instead of a crowded class."</p>
         <div class="quote-person">
-          <img src="assets/testimonial-2.jpg" alt="Photo of Tunde Balogun">
+          <span class="avatar" aria-hidden="true">TB</span>
           <div>
             <div class="who-name">Tunde Balogun</div>
             <div class="who-title">Web development student</div>
@@ -519,7 +522,7 @@
       <div class="quote-card">
         <p>"Our tutor adjusted the pace every week based on where my son was struggling."</p>
         <div class="quote-person">
-          <img src="assets/testimonial-3.jpg" alt="Photo of Mr. Ibrahim Musa">
+          <span class="avatar" aria-hidden="true">IM</span>
           <div>
             <div class="who-name">Ibrahim Musa</div>
             <div class="who-title">Parent of a JAMB candidate</div>

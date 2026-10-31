@@ -1,0 +1,10 @@
+{% extends "academy/base.html" %}
+{% block content %}
+<section>
+  <div class="wrap" style="text-align:center;padding:80px 20px;">
+    <h1>Page not found</h1>
+    <p style="margin:16px 0 28px;color:var(--slate);">The page you were looking for doesn't exist or has moved.</p>
+    <a href="{% url 'academy:home' %}" class="btn btn-primary">Back to home</a>
+  </div>
+</section>
+{% endblock %}

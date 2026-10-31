@@ -15,9 +15,37 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
+from django.http import FileResponse, HttpResponse
 from django.urls import path, include
+from django.views.decorators.cache import cache_page
+from django.conf import settings
+
+from academy.sitemaps import sitemaps
+
+
+def favicon_ico(request):
+    response = FileResponse(open(settings.BASE_DIR / "static" / "assets" / "favicon.ico", "rb"), content_type="image/x-icon")
+    response["Cache-Control"] = "public, max-age=86400"
+    return response
+
+
+def robots_txt(request):
+    body = "\n".join([
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Allow: /",
+        "",
+        f"Sitemap: {settings.SITE_URL.rstrip('/')}/sitemap.xml",
+        "",
+    ])
+    return HttpResponse(body, content_type="text/plain")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('favicon.ico', favicon_ico, name='favicon'),
+    path('sitemap.xml', cache_page(60 * 60)(sitemap), {'sitemaps': sitemaps}, name='sitemap'),
     path('', include('academy.urls')),
 ]
