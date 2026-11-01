@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.http import FileResponse, HttpResponse
-from django.urls import path, include
+from django.urls import path, include, re_path
+from django.views.static import serve
 from django.views.decorators.cache import cache_page
 from django.conf import settings
 
@@ -47,5 +48,6 @@ urlpatterns = [
     path('robots.txt', robots_txt, name='robots_txt'),
     path('favicon.ico', favicon_ico, name='favicon'),
     path('sitemap.xml', cache_page(60 * 60)(sitemap), {'sitemaps': sitemaps}, name='sitemap'),
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     path('', include('academy.urls')),
 ]
