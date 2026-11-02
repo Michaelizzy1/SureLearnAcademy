@@ -39,6 +39,10 @@ SITE_NAME = "SureLearn Academy"
 CONTACT_EMAIL = "hello@surelearnacademy.com"
 CONTACT_PHONE = "+2347033947599"
 WHATSAPP_URL = "https://wa.me/2347033947599"
+# Social profile links for the footer icons. Set these (or the env vars) to your real pages.
+SOCIAL_INSTAGRAM = os.getenv("SOCIAL_INSTAGRAM", "")
+SOCIAL_FACEBOOK = os.getenv("SOCIAL_FACEBOOK", "")
+SOCIAL_X = os.getenv("SOCIAL_X", "")
 SITEMAP_PROTOCOL = "https" if SITE_URL.startswith("https") else "http"
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'www.surelearnacademy.com.ng', 'surelearnacademy.com.ng']
